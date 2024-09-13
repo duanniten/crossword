@@ -1,11 +1,11 @@
 import sys
 
-from crossword import *
+from crossword.crossword import * 
 
 
 class CrosswordCreator():
 
-    def __init__(self, crossword):
+    def __init__(self, crossword : Crossword):
         """
         Create new CSP crossword generate.
         """
@@ -107,8 +107,8 @@ class CrosswordCreator():
                     consitentWords.add(word)
             consitentDomains[var] = consitentWords
         self.domains = consitentDomains
-        
-    def revise(self, x, y):
+
+    def revise(self, x:Variable, y:Variable):
         """
         Make variable `x` arc consistent with variable `y`.
         To do so, remove values from `self.domains[x]` for which there is no
@@ -117,7 +117,20 @@ class CrosswordCreator():
         Return True if a revision was made to the domain of `x`; return
         False if no revision was made.
         """
-        raise NotImplementedError
+        overlap = self.crossword.overlaps[x, y]
+        if overlap == None: return False
+
+        arcConsistentXY = set()
+        for wordX in self.domains[x]:
+            letherX = wordX[overlap[0]]
+            for wordY in self.domains[y]:
+                letherY = wordY[overlap[1]]
+                if letherX == letherY:
+                    arcConsistentXY.add(wordX)
+        if arcConsistentXY == self.domains[x]:
+            return False
+        self.domains[x] = arcConsistentXY
+        return True
 
     def ac3(self, arcs=None):
         """
