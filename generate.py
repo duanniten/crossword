@@ -184,7 +184,7 @@ class CrosswordCreator():
                             return False
                     
                     if y in overlapX:
-                        overlap = self.crossword.overlaps(x,y)
+                        overlap = self.crossword.overlaps[x,y]
                         if wordX[overlap[0]] != y[overlap[1]]:
                                 return False
             return True
@@ -197,7 +197,20 @@ class CrosswordCreator():
         The first value in the list, for example, should be the one
         that rules out the fewest values among the neighbors of `var`.
         """
-        raise NotImplementedError
+        domainOrder = []
+        for wordX in self.domains[var]:
+            eliminate = 0
+            for y in self.crossword.neighbors(var):
+                if y in assignment: continue
+                overlapXY = self.crossword.overlaps[var,y]
+                for wordY in self.domains[y]:
+                        if wordX[overlapXY[0]] != wordY[overlapXY[1]]:
+                            eliminate += 1
+            domainOrder.append((wordX,eliminate))
+        
+        domainOrder.sort(key=lambda item: item[1])
+        return [value for value, _ in domainOrder]
+        
 
     def select_unassigned_variable(self, assignment):
         """
