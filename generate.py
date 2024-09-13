@@ -156,22 +156,39 @@ class CrosswordCreator():
                         arcs.append(arcC)
         return True
 
-    def assignment_complete(self, assignment):
+    def assignment_complete(self, assignment:dict):
         """
         Return True if `assignment` is complete (i.e., assigns a value to each
         crossword variable); return False otherwise.
         """
-        for var, words in assignment:
+        for words in assignment.values():
             if len(words) != 1:
                 return False
         return True
 
-    def consistent(self, assignment):
+    def consistent(self, assignment:dict):
         """
         Return True if `assignment` is consistent (i.e., words fit in crossword
         puzzle without conflicting characters); return False otherwise.
         """
-        raise NotImplementedError
+        for x, wordsX in assignment.items():
+            overlapX = self.crossword.neighbors(x)
+            xC = self.crossword.variables[x]
+            for wordX in wordsX:
+                if len(wordX) != xC.length:
+                    return False
+                
+                for y in [assignment.items()] != x:
+                    for wordY in assignment[y]:
+                        if wordX == wordY:
+                            return False
+                    
+                    if y in overlapX:
+                        overlap = self.crossword.overlaps(x,y)
+                        if wordX[overlap[0]] != y[overlap[1]]:
+                                return False
+            return True
+
 
     def order_domain_values(self, var, assignment):
         """
