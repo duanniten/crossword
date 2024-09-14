@@ -1,6 +1,7 @@
 import sys
 
 from crossword.crossword import * 
+from math import inf
 
 
 class CrosswordCreator():
@@ -220,7 +221,19 @@ class CrosswordCreator():
         degree. If there is a tie, any of the tied variables are acceptable
         return values.
         """
-        raise NotImplementedError
+        variables = self.crossword.variables
+        variables = variables.difference_update(assignment)
+        less=('x', inf)
+        for var in variables:
+            nValues = len(self.order_domain_values(var, assignment))
+            if nValues < less[1]:
+                less = (var, nValues)
+            elif nValues == less[1]:
+                nNeiVar = self.crossword.neighbors(var)
+                nNeiLessVar = self.crossword.neighbors(less[0])
+                if nNeiVar > nNeiLessVar:
+                    less = (var, nValues)
+        return less[0]
 
     def backtrack(self, assignment):
         """
