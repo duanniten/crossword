@@ -187,7 +187,7 @@ class CrosswordCreator():
                         if overlap:
                             if wordX[overlap[0]] != wordY[overlap[1]]:
                                 return False
-            return True
+        return True
 
 
     def order_domain_values(self, var, assignment):
