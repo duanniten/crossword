@@ -177,7 +177,7 @@ class CrosswordCreator():
             if len(wordX) != x.length:
                 return False
                 
-            for y, wordY in assignment.items() != x:
+            for y, wordY in assignment.items():
                 if x != y:
                     if wordX == wordY:
                         return False
