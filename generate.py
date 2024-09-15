@@ -173,7 +173,7 @@ class CrosswordCreator():
         """
         for x, wordX in assignment.items():
             overlapX = self.crossword.neighbors(x)
-            xC = self.crossword.variables[x]
+            xC = self.domains[x]
             if len(wordX) != xC.length:
                 return False
                 
