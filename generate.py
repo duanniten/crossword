@@ -1,6 +1,6 @@
 import sys
 
-from crossword.crossword import * 
+from crossword import * 
 from math import inf
 
 
@@ -101,10 +101,10 @@ class CrosswordCreator():
          constraints; in this case, the length of the word.)
         """
         consitentDomains = {}
-        for var, words in self.domains.items:
+        for var, words in self.domains.items():
             consitentWords = set()
             for word in words:
-                if len(word) == len(var.length):
+                if len(word) == var.length:
                     consitentWords.add(word)
             consitentDomains[var] = consitentWords
         self.domains = consitentDomains
@@ -162,10 +162,9 @@ class CrosswordCreator():
         Return True if `assignment` is complete (i.e., assigns a value to each
         crossword variable); return False otherwise.
         """
-        for words in assignment.values():
-            if len(words) != 1:
-                return False
-        return True
+        if len(assignment.keys()) == len(self.domains.keys()):
+            return True
+        return False
 
     def consistent(self, assignment:dict):
         """
@@ -222,7 +221,7 @@ class CrosswordCreator():
         return values.
         """
         variables = self.crossword.variables
-        variables = variables.difference_update(assignment)
+        variables.difference_update(assignment)
         less=('x', inf)
         for var in variables:
             nValues = len(self.order_domain_values(var, assignment))
@@ -235,7 +234,7 @@ class CrosswordCreator():
                     less = (var, nValues)
         return less[0]
 
-    def backtrack(self, assignment):
+    def backtrack(self, assignment:dict):
         """
         Using Backtracking Search, take as input a partial assignment for the
         crossword and return a complete assignment if possible to do so.
@@ -244,8 +243,17 @@ class CrosswordCreator():
 
         If no assignment is possible, return None.
         """
-        raise NotImplementedError
-
+        if self.assignment_complete(assignment):
+            return assignment
+        var = self.select_unassigned_variable(assignment)
+        values = self.order_domain_values(var, assignment)
+        for value in values:
+            assignment[var] = value
+            result = self.backtrack(assignment)
+            if result != False:
+                return result
+            assignment.pop(var)
+        return False
 
 def main():
 

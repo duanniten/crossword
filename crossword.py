@@ -62,7 +62,7 @@ class Crossword():
             self.words = set(f.read().upper().splitlines())
 
         # Determine variable set
-        self.variables = set(Variable)
+        self.variables = set()
         for i in range(self.height):
             for j in range(self.width):
 
