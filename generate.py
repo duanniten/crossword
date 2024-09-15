@@ -171,21 +171,21 @@ class CrosswordCreator():
         Return True if `assignment` is consistent (i.e., words fit in crossword
         puzzle without conflicting characters); return False otherwise.
         """
-        for x, wordsX in assignment.items():
+        for x, wordX in assignment.items():
             overlapX = self.crossword.neighbors(x)
             xC = self.crossword.variables[x]
-            for wordX in wordsX:
-                if len(wordX) != xC.length:
-                    return False
+            if len(wordX) != xC.length:
+                return False
                 
-                for y in [assignment.items()] != x:
-                    for wordY in assignment[y]:
-                        if wordX == wordY:
-                            return False
+            for y, wordY in assignment.items() != x:
+                if x != y:
+                    if wordX == wordY:
+                        return False
                     
-                    if y in overlapX:
-                        overlap = self.crossword.overlaps[x,y]
-                        if wordX[overlap[0]] != y[overlap[1]]:
+                    if y in self.crossword.neighbors(x):
+                        overlap = self.crossword.overlaps.get((x,y))
+                        if overlap:
+                            if wordX[overlap[0]] != wordY[overlap[1]]:
                                 return False
             return True
 
