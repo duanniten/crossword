@@ -253,7 +253,7 @@ class CrosswordCreator():
             if result != False:
                 return result
             assignment.pop(var)
-        return False
+        return None
 
 def main():
 
