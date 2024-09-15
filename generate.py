@@ -172,9 +172,9 @@ class CrosswordCreator():
         puzzle without conflicting characters); return False otherwise.
         """
         for x, wordX in assignment.items():
-            overlapX = self.crossword.neighbors(x)
-            xC = self.domains[x]
-            if len(wordX) != xC.length:
+            
+            
+            if len(wordX) != x.length:
                 return False
                 
             for y, wordY in assignment.items() != x:
